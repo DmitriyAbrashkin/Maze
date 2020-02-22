@@ -15,7 +15,6 @@ namespace Maze
         Field Field = new Field(30, 30);
         public Form1()
         {
-
             InitializeComponent();
             Render();
         }
