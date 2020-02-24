@@ -12,7 +12,7 @@ namespace Maze
 {
     public partial class Form1 : Form
     {
-        Field Field = new Field(31, 31);
+        Field Field = new Field(101, 51);
         public Form1()
         {
             InitializeComponent();
