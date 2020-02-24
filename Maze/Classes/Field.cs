@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Maze
 {
@@ -35,7 +31,7 @@ namespace Maze
                 for (int j = 0; j < With; j++)
                 {
                     Tip tip;
-                    Vis vis = Vis.UnVisited;
+
 
                     if ((i % 2 != 0 && j % 2 != 0) && (i < Height - 1 && j < With - 1))
                     {
@@ -45,7 +41,7 @@ namespace Maze
                     {
                         tip = Tip.Wall;
                     }
-                    Cell cell = new Cell(i, j, tip, vis);
+                    Cell cell = new Cell(i, j, tip);
                     Cells[i, j] = cell;
                 }
             }

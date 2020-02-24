@@ -4,7 +4,6 @@
     {
         Cell,
         Wall,
-        Player,
         Exit
     }
 }
