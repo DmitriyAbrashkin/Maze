@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maze.Classes;
+using System;
 
 namespace Maze
 {
@@ -9,6 +10,8 @@ namespace Maze
 
         public Cell[,] Cells { get; set; }
 
+        public Player Player { get; set; }
+
 
 
         public Field(int height, int with)
@@ -16,12 +19,12 @@ namespace Maze
             Height = height;
             With = with;
             Cells = new Cell[Height, With];
-
-
             FillFeld();
-            CreateMaze(height, with, Cells);
+            CreateMaze();
 
         }
+
+      
 
 
         public void FillFeld()
@@ -31,8 +34,6 @@ namespace Maze
                 for (int j = 0; j < With; j++)
                 {
                     Tip tip;
-
-
                     if ((i % 2 != 0 && j % 2 != 0) && (i < Height - 1 && j < With - 1))
                     {
                         tip = Tip.Cell;
@@ -45,44 +46,41 @@ namespace Maze
                     Cells[i, j] = cell;
                 }
             }
+            Player player = new Player();
+            player.X = 1;
+            player.Y = 1;
+            Cells[player.X, player.Y].Tip = Tip.Player;
 
         }
 
-        private void CreateMaze(int height, int with, Cell[,] cells)
+        private void CreateMaze()
         {
             Random rnd = new Random();
-            for (int j = 1; j < height; j += 2)
+            for (int j = 1; j < Height; j += 2)
             {
-                for (int i = 1; i < with; i += 2)
+                for (int i = 1; i < With; i += 2)
                 {
                     int nap = rnd.Next(2);
                     if (nap == 0)
                     {
-                        if (j + 1 < height)
+                        if (j + 1 < Height)
                         {
-                            cells[j, i + 1].Tip = Tip.Cell;
+                            Cells[j, i + 1].Tip = Tip.Cell;
                         }
                         else
                         {
+                            Cells[j + 1, i].Tip = Tip.Cell;
                         }
                     }
                     else
                     {
-                        if (i + 1 < with)
+                        if (i + 1 < With)
                         {
-                            cells[j + 1, i].Tip = Tip.Cell;
+                            Cells[j + 1, i].Tip = Tip.Cell;
                         }
                     }
                 }
             }
-
-
-
-        }
-
-        private bool GetCountUnvisitedCells()
-        {
-            throw new NotImplementedException();
         }
     }
 }

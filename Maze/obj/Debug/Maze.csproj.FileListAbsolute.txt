@@ -10,9 +10,9 @@ C:\Users\fromt\Desktop\Учеба\c#\Лабиринты\Maze\Maze\obj\Debug\Maze
 C:\Users\fromt\Desktop\Учеба\ООП\Лабиринты\Maze\Maze\bin\Debug\Maze.exe.config
 C:\Users\fromt\Desktop\Учеба\ООП\Лабиринты\Maze\Maze\bin\Debug\Maze.exe
 C:\Users\fromt\Desktop\Учеба\ООП\Лабиринты\Maze\Maze\bin\Debug\Maze.pdb
-C:\Users\fromt\Desktop\Учеба\ООП\Лабиринты\Maze\Maze\obj\Debug\Maze.csprojAssemblyReference.cache
 C:\Users\fromt\Desktop\Учеба\ООП\Лабиринты\Maze\Maze\obj\Debug\Maze.Form1.resources
 C:\Users\fromt\Desktop\Учеба\ООП\Лабиринты\Maze\Maze\obj\Debug\Maze.Properties.Resources.resources
 C:\Users\fromt\Desktop\Учеба\ООП\Лабиринты\Maze\Maze\obj\Debug\Maze.csproj.GenerateResource.cache
 C:\Users\fromt\Desktop\Учеба\ООП\Лабиринты\Maze\Maze\obj\Debug\Maze.exe
 C:\Users\fromt\Desktop\Учеба\ООП\Лабиринты\Maze\Maze\obj\Debug\Maze.pdb
+C:\Users\fromt\Desktop\Учеба\ООП\Лабиринты\Maze\Maze\obj\Debug\Maze.csprojAssemblyReference.cache

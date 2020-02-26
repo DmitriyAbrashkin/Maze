@@ -1,9 +1,9 @@
-﻿namespace Maze
+﻿using Maze.Classes;
+
+namespace Maze
 {
-    public class Cell
+    public class Cell : Coords
     {
-        public int X { get; set; }
-        public int Y { get; set; }
         public Tip Tip { get; set; }
 
 

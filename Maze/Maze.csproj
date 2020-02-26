@@ -47,7 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Cell.cs" />
+    <Compile Include="Classes\Coords.cs" />
+    <Compile Include="Classes\Direction.cs" />
     <Compile Include="Classes\Field.cs" />
+    <Compile Include="Classes\Player.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
