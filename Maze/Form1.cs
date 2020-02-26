@@ -1,16 +1,24 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
+using Maze.Classes;
 
 namespace Maze
 {
     public partial class Form1 : Form
     {
-        Field Field = new Field(31, 31);
+
+
+        Player Player;
+        Button[,] Buttons;
+
+
         public Form1()
         {
             InitializeComponent();
+            Player = new Player();
+            Buttons = new Button[Player.Field.Height, Player.Field.With];
             Render();
+
         }
 
         private void Render()
@@ -18,29 +26,31 @@ namespace Maze
 
             const int Size = 15;
 
-            for (int i = 0; i < Field.Height; i++)
+
+
+            for (int i = 0; i < Player.Field.Height; i++)
             {
-                for (int j = 0; j < Field.With; j++)
+                for (int j = 0; j < Player.Field.With; j++)
                 {
                     Button pB = new Button();
                     pB.Size = new Size(Size, Size);
-                    pB.Left = Field.Cells[i, j].X * Size;
-                    pB.Top = Field.Cells[i, j].Y * Size;
+                    pB.Left = Player.Field.Cells[i, j].X * Size;
+                    pB.Top = Player.Field.Cells[i, j].Y * Size;
                     pB.Parent = tabPage1;
-                    pB.Tag = Field.Cells[i, j];
-                    pB.TabStop = false;
-                    if (Field.Cells[i, j].Tip == Tip.Wall)
+                    pB.Tag = Player.Field.Cells[i, j];
+                    if (Player.Field.Cells[i, j].Tip == Tip.Wall)
                     {
                         pB.BackColor = Color.Black;
                     }
-                    else if (Field.Cells[i, j].Tip == Tip.Wall)
+                    else if (Player.Field.Cells[i, j].Tip == Tip.Wall)
                     {
-                        pB.BackColor = Color.White;
+                        pB.BackColor = Color.Gray;
                     }
-                    else if (Field.Cells[i, j].Tip == Tip.Player)
+                    else if (Player.Field.Cells[i, j].Tip == Tip.Player)
                     {
                         pB.BackColor = Color.Red;
                     }
+                    Buttons[i, j] = pB;
                 }
 
             }
@@ -48,31 +58,44 @@ namespace Maze
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            //Button btn = (sender as Button);
-            //object pO = btn.Tag;
-            //Cell pF = pO as Cell;
-
-            switch (e.KeyCode)
+            Player.Direction = Direction.dw;
+            if (tabControl1.SelectedIndex == 0) // проверяем какая текущая страница
             {
-                case Keys.Up://вверх
-                    Field.Player.Step(Classes.Direction.tp);
-                    Render();
-                    break;
-                case Keys.Down: //вниз
-                    Field.Player.Step(Classes.Direction.dw);
-                    Render();
-                    break;
-                case Keys.Right:  //вправо
-                    Field.Player.Step(Classes.Direction.rt);
-                    Render();
-                    break;
-                case Keys.Left:  //влево
-                    Field.Player.Step(Classes.Direction.lf);
-                    Render();
-                    break;
-                default: break;
+                switch (e.KeyCode)
+                {
+                    case Keys.Up://вверх
+                        if (Player.Step(Direction.tp))
+                        {
+                            Buttons[Player.X, Player.Y].BackColor = Color.Red ;
+                            Buttons[Player.X, Player.Y + 1].BackColor = Color.Gray;
+                        }
+                        break;
+                    case Keys.Down: //вниз
+                        if (Player.Step(Direction.dw))
+                        {
+                            Buttons[Player.X, Player.Y].BackColor = Color.Red;
+                            Buttons[Player.X, Player.Y - 1].BackColor = Color.Gray;
+                        }
+                        break;
+                    case Keys.Right:  //вправо
+                        if (Player.Step(Direction.rt))
+                        {
+                            Buttons[Player.X, Player.Y].BackColor = Color.Red;
+                            Buttons[Player.X - 1, Player.Y].BackColor = Color.Gray;
+                        }
+                        break;
+                    case Keys.Left:  //влево
+                        if (Player.Step(Direction.lf))
+                        {
+                            Buttons[Player.X, Player.Y].BackColor = Color.Red;
+                            Buttons[Player.X + 1, Player.Y].BackColor = Color.White;
+                        }
+                        break;
+                    default: break;
 
+                }
             }
+
         }
 
 

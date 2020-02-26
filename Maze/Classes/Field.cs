@@ -1,5 +1,4 @@
-﻿using Maze.Classes;
-using System;
+﻿using System;
 
 namespace Maze
 {
@@ -10,9 +9,6 @@ namespace Maze
 
         public Cell[,] Cells { get; set; }
 
-        public Player Player { get; set; }
-
-
 
         public Field(int height, int with)
         {
@@ -21,11 +17,7 @@ namespace Maze
             Cells = new Cell[Height, With];
             FillFeld();
             CreateMaze();
-
         }
-
-      
-
 
         public void FillFeld()
         {
@@ -46,11 +38,6 @@ namespace Maze
                     Cells[i, j] = cell;
                 }
             }
-            Player player = new Player();
-            player.X = 1;
-            player.Y = 1;
-            Cells[player.X, player.Y].Tip = Tip.Player;
-
         }
 
         private void CreateMaze()
