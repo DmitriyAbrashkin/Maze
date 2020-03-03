@@ -5,6 +5,7 @@
         Cell,
         Wall,
         Player,
-        Exit
+        Exit, 
+        Dark
     }
 }

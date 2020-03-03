@@ -22,9 +22,9 @@ namespace Maze
         }
 
         private void Render()
-        {
 
-            const int Size = 15;
+        {
+            const int Size = 35;
 
 
 
@@ -42,13 +42,21 @@ namespace Maze
                     {
                         pB.BackColor = Color.Black;
                     }
-                    else if (Player.Field.Cells[i, j].Tip == Tip.Wall)
+                    else if (Player.Field.Cells[i, j].Tip == Tip.Cell)
                     {
-                        pB.BackColor = Color.Gray;
+                        pB.BackColor = Color.White;
                     }
                     else if (Player.Field.Cells[i, j].Tip == Tip.Player)
                     {
                         pB.BackColor = Color.Red;
+                    }
+                    else if (Player.Field.Cells[i, j].Tip == Tip.Exit)
+                    {
+                        pB.BackColor = Color.Green;
+                    }
+                    else if (Player.Field.Cells[i, j].Tip == Tip.Dark)
+                    {
+                        pB.BackColor = Color.Blue;
                     }
                     Buttons[i, j] = pB;
                 }
@@ -66,22 +74,22 @@ namespace Maze
                     case Keys.Up://вверх
                         if (Player.Step(Direction.tp))
                         {
-                            Buttons[Player.X, Player.Y].BackColor = Color.Red ;
-                            Buttons[Player.X, Player.Y + 1].BackColor = Color.Gray;
+                            Buttons[Player.X, Player.Y].BackColor = Color.Red;
+                            Buttons[Player.X, Player.Y + 1].BackColor = Color.White;
                         }
                         break;
                     case Keys.Down: //вниз
                         if (Player.Step(Direction.dw))
                         {
                             Buttons[Player.X, Player.Y].BackColor = Color.Red;
-                            Buttons[Player.X, Player.Y - 1].BackColor = Color.Gray;
+                            Buttons[Player.X, Player.Y - 1].BackColor = Color.White;
                         }
                         break;
                     case Keys.Right:  //вправо
                         if (Player.Step(Direction.rt))
                         {
                             Buttons[Player.X, Player.Y].BackColor = Color.Red;
-                            Buttons[Player.X - 1, Player.Y].BackColor = Color.Gray;
+                            Buttons[Player.X - 1, Player.Y].BackColor = Color.White;
                         }
                         break;
                     case Keys.Left:  //влево
@@ -93,6 +101,14 @@ namespace Maze
                         break;
                     default: break;
 
+                }
+                if (Player.EndGame())
+                {
+                    MessageBox.Show("Конец");
+                    Player.Field = new Field(43, 21);
+                    Render();
+                    tabPage1.Refresh();
+                    this.Refresh();
                 }
             }
 
