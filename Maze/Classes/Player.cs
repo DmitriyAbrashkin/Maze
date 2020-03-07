@@ -20,7 +20,7 @@ namespace Maze
             X = 1;
             Y = 1;
             Field.Cells[X, Y].Tip = Tip.Player;
-            DarkMaze(X, Y);
+           // DarkMaze(X, Y);
         }
 
         public bool Step(Direction direction)
