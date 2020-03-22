@@ -6,27 +6,22 @@ namespace Maze
 {
     public partial class Form1 : Form
     {
-
-
         Player Player;
         Button[,] Buttons;
-
 
         public Form1()
         {
             InitializeComponent();
-            Player = new Player();
-            Buttons = new Button[Player.Field.Height, Player.Field.With];
             Render();
-
         }
 
         private void Render()
-
         {
+            Player = new Player(1, 1);
+            Player.Field.Cells[1, 1] = Player;
+            Buttons = new Button[Player.Field.Height, Player.Field.With];
+
             const int Size = 35;
-
-
 
             for (int i = 0; i < Player.Field.Height; i++)
             {
@@ -38,35 +33,50 @@ namespace Maze
                     pB.Top = Player.Field.Cells[i, j].Y * Size;
                     pB.Parent = tabPage1;
                     pB.Tag = Player.Field.Cells[i, j];
-                    if (Player.Field.Cells[i, j].Tip == Tip.Wall)
-                    {
+                    if (Player.Field.Cells[i, j] is WallCell)
                         pB.BackColor = Color.Black;
-                    }
-                    else if (Player.Field.Cells[i, j].Tip == Tip.Cell)
-                    {
-                        pB.BackColor = Color.White;
-                    }
-                    else if (Player.Field.Cells[i, j].Tip == Tip.Player)
-                    {
+                    else if (Player.Field.Cells[i, j] is FreeCell)
+                        pB.BackColor = Color.Black;
+                    else if (Player.Field.Cells[i, j] is Player)
                         pB.BackColor = Color.Red;
-                    }
-                    else if (Player.Field.Cells[i, j].Tip == Tip.Exit)
-                    {
+                    else if (Player.Field.Cells[i, j] is ExetCell)
                         pB.BackColor = Color.Green;
-                    }
-                    else if (Player.Field.Cells[i, j].Tip == Tip.Dark)
-                    {
-                        pB.BackColor = Color.Blue;
-                    }
+
                     Buttons[i, j] = pB;
                 }
 
+            }
+
+            RenderDark();
+
+        }
+
+        private void RenderDark()
+        {
+            for (int i = 1; i < 10; i++)
+            {
+                for (int j = 1; j < 10; j++)
+                {
+                    if (Player.Field.Cells[i, j] is FreeCell && !(Player.Field.Cells[i, j] is Player))
+                    {
+                        Buttons[i, j].BackColor = Color.White;
+                    }
+                }
+            }
+            for (int i = 10; i < 1; i--)
+            {
+                for (int j = 10; j < 10; j--)
+                {
+                    if (Player.Field.Cells[i, j] is FreeCell && !(Player.Field.Cells[i,j] is Player))
+                    {
+                        Buttons[i, j].BackColor = Color.White;
+                    }
+                }
             }
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            Player.Direction = Direction.dw;
             if (tabControl1.SelectedIndex == 0) // проверяем какая текущая страница
             {
                 switch (e.KeyCode)
@@ -83,6 +93,7 @@ namespace Maze
                         {
                             Buttons[Player.X, Player.Y].BackColor = Color.Red;
                             Buttons[Player.X, Player.Y - 1].BackColor = Color.White;
+                            RenderDark();
                         }
                         break;
                     case Keys.Right:  //вправо
@@ -102,6 +113,7 @@ namespace Maze
                     default: break;
 
                 }
+              
                 if (Player.EndGame())
                 {
                     MessageBox.Show("Конец");

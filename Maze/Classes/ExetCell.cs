@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 
 namespace Maze.Classes
 {
-   public class Coords
+  public  class ExetCell : Cell
     {
-       public int X { get; set; }
-        public int Y { get; set; }
-
-        public Coords(int x, int y)
+        public ExetCell(int x, int y, bool visited) : base(x, y)
         {
-            X = x;
-            Y = y;
         }
     }
 }
