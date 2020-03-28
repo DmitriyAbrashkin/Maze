@@ -1,6 +1,7 @@
-﻿using System.Drawing;
+﻿using Maze.Classes;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
-using Maze.Classes;
 
 namespace Maze
 {
@@ -27,16 +28,18 @@ namespace Maze
             {
                 for (int j = 0; j < Player.Field.With; j++)
                 {
-                    Button pB = new Button();
-                    pB.Size = new Size(Size, Size);
-                    pB.Left = Player.Field.Cells[i, j].X * Size;
-                    pB.Top = Player.Field.Cells[i, j].Y * Size;
-                    pB.Parent = tabPage1;
-                    pB.Tag = Player.Field.Cells[i, j];
+                    Button pB = new Button
+                    {
+                        Size = new Size(Size, Size),
+                        Left = Player.Field.Cells[i, j].X * Size,
+                        Top = Player.Field.Cells[i, j].Y * Size,
+                        Parent = tabPage1,
+                        Tag = Player.Field.Cells[i, j]
+                    };
                     if (Player.Field.Cells[i, j] is WallCell)
                         pB.BackColor = Color.Black;
                     else if (Player.Field.Cells[i, j] is FreeCell)
-                        pB.BackColor = Color.Black;
+                        pB.BackColor = Color.White;
                     else if (Player.Field.Cells[i, j] is Player)
                         pB.BackColor = Color.Red;
                     else if (Player.Field.Cells[i, j] is ExetCell)
@@ -44,35 +47,61 @@ namespace Maze
 
                     Buttons[i, j] = pB;
                 }
-
             }
-
             RenderDark();
 
         }
 
+
+        private List<Cell> GetCellAroundPlayer(int x, int y)
+        {
+            List<Cell> cells = new List<Cell>();
+            for (int i = -2; i < 3; i++)
+            {
+                for (int j = -2; j < 3; j++)
+                {
+                    Cell cell = new Cell(x + i, y + j);
+                    cells.Add(cell);
+                }
+            }
+            return cells;
+        }
+
+
         private void RenderDark()
         {
-            for (int i = 1; i < 10; i++)
+            List<Cell> cells = GetCellAroundPlayer(Player.X, Player.Y);
+
+            foreach (var item in Player.Field.Cells)
             {
-                for (int j = 1; j < 10; j++)
+                if (!(item is ExetCell) && !(item is Player))
                 {
-                    if (Player.Field.Cells[i, j] is FreeCell && !(Player.Field.Cells[i, j] is Player))
+                    Buttons[item.X, item.Y].BackColor = Color.Black;
+                }
+
+            }
+
+            foreach (var item in cells)
+            {
+                if (item.X + 1 < Player.Field.Height && item.Y + 1 < Player.Field.With && item.X - 1 >= 0 && item.Y - 1 >= 0)
+                {
+                    if (Player.Field.Cells[item.X, item.Y] is FreeCell)
                     {
-                        Buttons[i, j].BackColor = Color.White;
+                        Buttons[item.X, item.Y].BackColor = Color.White;
+                    }
+                    else if (Player.Field.Cells[item.X, item.Y] is ExetCell)
+                    {
+                        Buttons[item.X, item.Y].BackColor = Color.Green;
+                    }
+                    else if (Player.Field.Cells[item.X, item.Y] is WallCell)
+                    {
+                        Buttons[item.X, item.Y].BackColor = Color.Gray;
                     }
                 }
+
             }
-            for (int i = 10; i < 1; i--)
-            {
-                for (int j = 10; j < 10; j--)
-                {
-                    if (Player.Field.Cells[i, j] is FreeCell && !(Player.Field.Cells[i,j] is Player))
-                    {
-                        Buttons[i, j].BackColor = Color.White;
-                    }
-                }
-            }
+
+
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -84,6 +113,7 @@ namespace Maze
                     case Keys.Up://вверх
                         if (Player.Step(Direction.tp))
                         {
+                            RenderDark();
                             Buttons[Player.X, Player.Y].BackColor = Color.Red;
                             Buttons[Player.X, Player.Y + 1].BackColor = Color.White;
                         }
@@ -91,33 +121,39 @@ namespace Maze
                     case Keys.Down: //вниз
                         if (Player.Step(Direction.dw))
                         {
+                            RenderDark();
                             Buttons[Player.X, Player.Y].BackColor = Color.Red;
                             Buttons[Player.X, Player.Y - 1].BackColor = Color.White;
-                            RenderDark();
                         }
                         break;
                     case Keys.Right:  //вправо
                         if (Player.Step(Direction.rt))
                         {
+                            RenderDark();
                             Buttons[Player.X, Player.Y].BackColor = Color.Red;
                             Buttons[Player.X - 1, Player.Y].BackColor = Color.White;
+
                         }
                         break;
                     case Keys.Left:  //влево
                         if (Player.Step(Direction.lf))
                         {
+                            RenderDark();
                             Buttons[Player.X, Player.Y].BackColor = Color.Red;
                             Buttons[Player.X + 1, Player.Y].BackColor = Color.White;
+
                         }
                         break;
                     default: break;
 
                 }
-              
+
+
+
                 if (Player.EndGame())
                 {
                     MessageBox.Show("Конец");
-                    Player.Field = new Field(43, 21);
+                    tabPage1.Controls.Clear();
                     Render();
                     tabPage1.Refresh();
                     this.Refresh();

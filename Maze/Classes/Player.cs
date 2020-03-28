@@ -13,7 +13,7 @@ namespace Maze
         {
             X = x;
             Y = y;
-            Field = new Field(43, 21);
+            Field = new Field(21, 21);
 
         }
 
@@ -83,25 +83,5 @@ namespace Maze
             else
                 return false;
         }
-
-        public void DarkMaze(int x, int y)
-        {
-            //for (int i = x; i < Field.Height - 2; i++)
-            //{
-            //    WallCell wallCell = new WallCell(x + 2, y);
-            //    Field.Cells[i + 2, y] = wallCell;
-            //}
-
-            //for (int i = x; i < 0; i--)
-            //{
-            //    WallCell wallCell = new WallCell(x - 2, y);
-            //    Field.Cells[i - 2, y] = wallCell;
-            //}
-
-
-
-
-        }
-
     }
 }
