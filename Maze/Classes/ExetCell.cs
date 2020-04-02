@@ -8,7 +8,7 @@ namespace Maze.Classes
 {
   public  class ExetCell : Cell
     {
-        public ExetCell(int x, int y, bool visited) : base(x, y)
+        public ExetCell(int x, int y) : base(x, y)
         {
         }
     }

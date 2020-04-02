@@ -6,15 +6,19 @@ using System.Threading.Tasks;
 
 namespace Maze.Classes
 {
-   public class Coords
+    public class Coords
     {
-       public int X { get; set; }
+        #region public properties
+        public int X { get; set; }
         public int Y { get; set; }
+        #endregion
 
+        #region constructor
         public Coords(int x, int y)
         {
             X = x;
             Y = y;
         }
+        #endregion
     }
 }

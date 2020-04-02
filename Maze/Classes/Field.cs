@@ -6,16 +6,21 @@ namespace Maze
 {
     public class Field
     {
+        #region public properties
         public int Height { get; set; }
         public int With { get; set; }
-
+        public ExetCell Finish { get; set; }
+        public BonusCell Bonus { get; set; }
         public Cell[,] Cells { get; set; }
+        #endregion
 
-        private Stack<Cell> path = new Stack<Cell>();
-        private List<Cell> neighbords = new List<Cell>();
-        private Random Random = new Random();
-        public ExetCell finish;
+        #region private properties
+        private readonly Stack<Cell> path = new Stack<Cell>();
+        private readonly List<Cell> neighbords = new List<Cell>();
+        private readonly Random Random = new Random();
+        #endregion
 
+        #region constructor
         public Field(int height, int with)
         {
             Cells = new Cell[height, with];
@@ -23,12 +28,16 @@ namespace Maze
             Height = height;
             With = with;
             FillFeld();
-            CreateMazeEllersAlghoritm();    
-            finish = new ExetCell(height - 2, with - 2, true);
-            Cells[height - 2, with - 2] = finish;
-           //CreateMazeBinarThreeAlghoritm();
-        }
+            CreateMazeEllersAlghoritm();
+            Finish = new ExetCell(height - 2, with - 2);
+            Cells[height - 2, with - 2] = Finish;
 
+            Bonus = new BonusCell(2, 2);
+            Cells[2, 2] = Bonus;
+        }
+        #endregion
+
+        #region private metods
         private void FillFeld()
         {
             for (int i = 0; i < Height; i++)
@@ -37,7 +46,7 @@ namespace Maze
                 {
                     if ((i % 2 != 0 && j % 2 != 0) && (i < Height - 1 && j < With - 1))
                     {
-                        FreeCell freeCell = new FreeCell(i, j, false);
+                        FreeCell freeCell = new FreeCell(i, j);
                         Cells[i, j] = freeCell;
                     }
                     else
@@ -47,7 +56,7 @@ namespace Maze
                     }
                 }
             }
-            path.Push(Cells[1,1]);
+            path.Push(Cells[1, 1]);
         }
 
         private void CreateMazeEllersAlghoritm()
@@ -82,7 +91,7 @@ namespace Maze
             int addX = (xDiff != 0) ? xDiff / Math.Abs(xDiff) : 0; // Узнаем направление удаления стены
             int addY = (yDiff != 0) ? yDiff / Math.Abs(yDiff) : 0;
             // Координаты удаленной стены
-            FreeCell freeCell = new FreeCell(first.X + addX, first.Y + addY, true);
+            FreeCell freeCell = new FreeCell(first.X + addX, first.Y + addY);
             Cells[first.X + addX, first.Y + addY] = freeCell; //обращаем стену в клетку
             second.Visited = true; //делаем клетку посещенной
             Cells[second.X, second.Y] = second;
@@ -101,10 +110,10 @@ namespace Maze
             const int distance = 2;
             Cell[] possibleNeighbours = new[] // Список всех возможных соседeй
             {
-                new FreeCell (x, y - distance, false),
-                new FreeCell (x + distance, y, false),
-                new FreeCell (x, y + distance, false),
-                new FreeCell (x - distance, y, false),
+                new FreeCell (x, y - distance),
+                new FreeCell (x + distance, y),
+                new FreeCell (x, y + distance),
+                new FreeCell (x - distance, y),
             };
 
             for (int i = 0; i < 4; i++) // Проверяем все 4 направления
@@ -119,38 +128,7 @@ namespace Maze
                 }
             }
         }
-
-
-
-        private void CreateMazeBinarThreeAlghoritm()
-        {
-            //    Random rnd = new Random();
-            //    for (int j = 1; j < Height; j += 2)
-            //    {
-            //        for (int i = 1; i < With; i += 2)
-            //        {
-            //            int nap = rnd.Next(2);
-            //            if (nap == 0)
-            //            {
-            //                if (j + 1 < Height)
-            //                {
-            //                    Cells[j, i + 1].Tip = Tip.Cell;
-            //                }
-            //                else
-            //                {
-            //                    Cells[j + 1, i].Tip = Tip.Cell;
-            //                }
-            //            }
-            //            else
-            //            {
-            //                if (i + 1 < With)
-            //                {
-            //                    Cells[j + 1, i].Tip = Tip.Cell;
-            //                }
-            //            }
-            //        }
-            //    }
-        }
+        #endregion
     }
 }
 

@@ -8,7 +8,7 @@ namespace Maze.Classes
 {
     public class FreeCell : Cell
     {
-        public FreeCell(int x, int y,  bool visited) : base(x, y)
+        public FreeCell(int x, int y) : base(x, y)
         {
         }
     }

@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\BonusCell.cs" />
     <Compile Include="Classes\Cell.cs" />
     <Compile Include="Classes\Coords.cs" />
     <Compile Include="Classes\Direction.cs" />

@@ -1,5 +1,4 @@
 ﻿using Maze.Classes;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -48,60 +47,17 @@ namespace Maze
                     Buttons[i, j] = pB;
                 }
             }
-            RenderDark();
+            Player.RenderDark();
+            Dark();
 
         }
 
-
-        private List<Cell> GetCellAroundPlayer(int x, int y)
+        private void Dark()
         {
-            List<Cell> cells = new List<Cell>();
-            for (int i = -2; i < 3; i++)
-            {
-                for (int j = -2; j < 3; j++)
-                {
-                    Cell cell = new Cell(x + i, y + j);
-                    cells.Add(cell);
-                }
-            }
-            return cells;
-        }
-
-
-        private void RenderDark()
-        {
-            List<Cell> cells = GetCellAroundPlayer(Player.X, Player.Y);
-
             foreach (var item in Player.Field.Cells)
             {
-                if (!(item is ExetCell) && !(item is Player))
-                {
-                    Buttons[item.X, item.Y].BackColor = Color.Black;
-                }
-
+                Buttons[item.X, item.Y].BackColor = item.Color;
             }
-
-            foreach (var item in cells)
-            {
-                if (item.X + 1 < Player.Field.Height && item.Y + 1 < Player.Field.With && item.X - 1 >= 0 && item.Y - 1 >= 0)
-                {
-                    if (Player.Field.Cells[item.X, item.Y] is FreeCell)
-                    {
-                        Buttons[item.X, item.Y].BackColor = Color.White;
-                    }
-                    else if (Player.Field.Cells[item.X, item.Y] is ExetCell)
-                    {
-                        Buttons[item.X, item.Y].BackColor = Color.Green;
-                    }
-                    else if (Player.Field.Cells[item.X, item.Y] is WallCell)
-                    {
-                        Buttons[item.X, item.Y].BackColor = Color.Gray;
-                    }
-                }
-
-            }
-
-
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -111,48 +67,49 @@ namespace Maze
                 switch (e.KeyCode)
                 {
                     case Keys.Up://вверх
-                        if (Player.Step(Direction.tp))
+                        if (Player.Step(Direction.Top))
                         {
-                            RenderDark();
+                            Player.RenderDark();
+                            Dark();
                             Buttons[Player.X, Player.Y].BackColor = Color.Red;
                             Buttons[Player.X, Player.Y + 1].BackColor = Color.White;
                         }
                         break;
                     case Keys.Down: //вниз
-                        if (Player.Step(Direction.dw))
+                        if (Player.Step(Direction.Down))
                         {
-                            RenderDark();
+                            Player.RenderDark();
+                            Dark();
                             Buttons[Player.X, Player.Y].BackColor = Color.Red;
                             Buttons[Player.X, Player.Y - 1].BackColor = Color.White;
                         }
                         break;
                     case Keys.Right:  //вправо
-                        if (Player.Step(Direction.rt))
+                        if (Player.Step(Direction.Right))
                         {
-                            RenderDark();
+                            Player.RenderDark();
+                            Dark();
                             Buttons[Player.X, Player.Y].BackColor = Color.Red;
                             Buttons[Player.X - 1, Player.Y].BackColor = Color.White;
 
                         }
                         break;
                     case Keys.Left:  //влево
-                        if (Player.Step(Direction.lf))
+                        if (Player.Step(Direction.Left))
                         {
-                            RenderDark();
+                            Player.RenderDark();
+                            Dark();
                             Buttons[Player.X, Player.Y].BackColor = Color.Red;
                             Buttons[Player.X + 1, Player.Y].BackColor = Color.White;
-
                         }
                         break;
                     default: break;
 
                 }
 
-
-
                 if (Player.EndGame())
                 {
-                    MessageBox.Show("Конец");
+                    MessageBox.Show("Готовы к следующему лабиринту?)");
                     tabPage1.Controls.Clear();
                     Render();
                     tabPage1.Refresh();
