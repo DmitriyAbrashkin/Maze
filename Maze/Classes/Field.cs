@@ -1,6 +1,7 @@
 ﻿using Maze.Classes;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Maze
 {
@@ -12,6 +13,8 @@ namespace Maze
         public ExetCell Finish { get; set; }
         public BonusCell Bonus { get; set; }
         public Cell[,] Cells { get; set; }
+
+        public Player Player { get; set; }
         #endregion
 
         #region private properties
@@ -24,16 +27,23 @@ namespace Maze
         public Field(int height, int with)
         {
             Cells = new Cell[height, with];
-
             Height = height;
             With = with;
             FillFeld();
             CreateMazeEllersAlghoritm();
-            Finish = new ExetCell(height - 2, with - 2);
-            Cells[height - 2, with - 2] = Finish;
 
-            Bonus = new BonusCell(2, 2);
-            Cells[2, 2] = Bonus;
+            Finish = new ExetCell(height - 2, with - 2);
+            Cells[Finish.X, Finish.Y] = Finish;
+            Finish.Color = Color.Green;
+          
+
+            Player = new Player(1, 1, this);
+            Player.Field.Cells[Player.X, Player.Y] = Player;
+
+            Bonus = new BonusCell(Random.Next(0, height-1), Random.Next(0, with-1));
+            Cells[Bonus.X, Bonus.Y] = Bonus;
+
+           
         }
         #endregion
 

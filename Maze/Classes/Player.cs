@@ -15,13 +15,12 @@ namespace Maze
         #endregion
 
         #region constructor
-        public Player(int x, int y) : base(x, y)
+        public Player(int x, int y, Field field) : base(x, y)
         {
             X = x;
             Y = y;
-            Field = new Field(43, 21);
             RadiusNoDarkCell = 2;
-
+            Field = field;
         }
         #endregion
 
@@ -29,9 +28,9 @@ namespace Maze
         private List<Cell> GetCellAroundPlayer(int x, int y)
         {
             List<Cell> cells = new List<Cell>();
-            for (int i = -RadiusNoDarkCell; i < RadiusNoDarkCell + 1; i++)
+            for (int i = -RadiusNoDarkCell; i < RadiusNoDarkCell; i++)
             {
-                for (int j = -RadiusNoDarkCell; j < RadiusNoDarkCell + 1; j++)
+                for (int j = -RadiusNoDarkCell; j < RadiusNoDarkCell; j++)
                 {
                     Cell cell = new Cell(x + i, y + j);
                     cells.Add(cell);
@@ -119,11 +118,8 @@ namespace Maze
 
             foreach (var item in Field.Cells)
             {
-                if (!(item is ExetCell) || (!(item is Player)))
-                {
                     item.IsDark = true;
                     Field.Cells[item.X, item.Y].Color = Color.Black;
-                }
             }
 
             foreach (var item in cells)
@@ -135,28 +131,25 @@ namespace Maze
                         Field.Cells[item.X, item.Y].Color = Color.White;
                         Field.Cells[item.X, item.Y].IsDark = false;
                     }
-                    else if (Field.Cells[item.X, item.Y] is BonusCell)
-                    {
-                        Field.Cells[item.X, item.Y].Color = Color.Aqua;
-                        Field.Cells[item.X, item.Y].IsDark = false;
-                    }
-                    else if (Field.Cells[item.X, item.Y] is Player)
-                    {
-                        Field.Cells[item.X, item.Y].Color = Color.Red;
-                        Field.Cells[item.X, item.Y].IsDark = false;
-                    }
-                    else if (Field.Cells[item.X, item.Y] is ExetCell)
-                    {
-                        Field.Cells[item.X, item.Y].Color = Color.Green;
-                        Field.Cells[item.X, item.Y].IsDark = false;
-                    }
                     else if (Field.Cells[item.X, item.Y] is WallCell)
                     {
                         Field.Cells[item.X, item.Y].Color = Color.Gray;
                         Field.Cells[item.X, item.Y].IsDark = false;
                     }
+                    else if (Field.Cells[item.X, item.Y] is BonusCell)
+                    {
+                        Field.Cells[Field.Bonus.X, Field.Bonus.Y].Color = Color.Aqua;
+                        Field.Cells[Field.Bonus.X, Field.Bonus.Y].IsDark = false;
+                    }
                 }
             }
+            Field.Cells[Field.Player.X, Field.Player.Y].Color = Color.Red;
+            Field.Cells[Field.Player.X, Field.Player.Y].IsDark = false;
+
+         
+
+            Field.Cells[Field.Finish.X, Field.Finish.Y].Color = Color.Green;
+            Field.Cells[Field.Finish.X, Field.Finish.Y].IsDark = false;
         }
 
         public bool EndGame()

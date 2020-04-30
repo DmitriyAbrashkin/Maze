@@ -1,4 +1,5 @@
 ﻿using Maze.Classes;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,9 +7,9 @@ namespace Maze
 {
     public partial class Form1 : Form
     {
-        Player Player;
         Button[,] Buttons;
-
+        Field Field;
+        Form2 secondForm;
         public Form1()
         {
             InitializeComponent();
@@ -17,44 +18,44 @@ namespace Maze
 
         private void Render()
         {
-            Player = new Player(1, 1);
-            Player.Field.Cells[1, 1] = Player;
-            Buttons = new Button[Player.Field.Height, Player.Field.With];
-
-            const int Size = 35;
-
-            for (int i = 0; i < Player.Field.Height; i++)
+            secondForm = new Form2();
+            secondForm.ShowDialog();
+            if (secondForm.DialogResult == DialogResult.OK)
             {
-                for (int j = 0; j < Player.Field.With; j++)
+                Field = new Field(secondForm.ReturnHeight(), secondForm.ReturnWidth());
+            }
+            else
+            {
+                Field = new Field(7, 7);
+            }
+
+            Buttons = new Button[Field.Height, Field.With];
+            const int Size = 35;
+            this.Size = new Size(Field.Height * Size + 25, Field.With * Size + 30);
+
+            for (int i = 0; i < Field.Height; i++)
+            {
+                for (int j = 0; j < Field.With; j++)
                 {
                     Button pB = new Button
                     {
                         Size = new Size(Size, Size),
-                        Left = Player.Field.Cells[i, j].X * Size,
-                        Top = Player.Field.Cells[i, j].Y * Size,
+                        Left = Field.Cells[i, j].X * Size,
+                        Top = Field.Cells[i, j].Y * Size,
                         Parent = tabPage1,
-                        Tag = Player.Field.Cells[i, j]
+                        Tag = Field.Cells[i, j]
                     };
-                    if (Player.Field.Cells[i, j] is WallCell)
-                        pB.BackColor = Color.Black;
-                    else if (Player.Field.Cells[i, j] is FreeCell)
-                        pB.BackColor = Color.White;
-                    else if (Player.Field.Cells[i, j] is Player)
-                        pB.BackColor = Color.Red;
-                    else if (Player.Field.Cells[i, j] is ExetCell)
-                        pB.BackColor = Color.Green;
-
                     Buttons[i, j] = pB;
                 }
             }
-            Player.RenderDark();
+            Field.Player.RenderDark();
             Dark();
 
         }
 
         private void Dark()
         {
-            foreach (var item in Player.Field.Cells)
+            foreach (var item in Field.Cells)
             {
                 Buttons[item.X, item.Y].BackColor = item.Color;
             }
@@ -67,47 +68,55 @@ namespace Maze
                 switch (e.KeyCode)
                 {
                     case Keys.Up://вверх
-                        if (Player.Step(Direction.Top))
+                        if (Field.Player.Step(Direction.Top))
                         {
-                            Player.RenderDark();
+                            Field.Player.RenderDark();
                             Dark();
-                            Buttons[Player.X, Player.Y].BackColor = Color.Red;
-                            Buttons[Player.X, Player.Y + 1].BackColor = Color.White;
+                            Buttons[Field.Player.X, Field.Player.Y].BackColor = Color.Red;
+                            Buttons[Field.Player.X, Field.Player.Y + 1].BackColor = Color.White;
+                            Field.Cells[Field.Player.X, Field.Player.Y] = new Player(Field.Player.X, Field.Player.Y, Field);
+                            Field.Cells[Field.Player.X, Field.Player.Y+1] = new FreeCell(Field.Player.X, Field.Player.Y+1);
                         }
                         break;
                     case Keys.Down: //вниз
-                        if (Player.Step(Direction.Down))
+                        if (Field.Player.Step(Direction.Down))
                         {
-                            Player.RenderDark();
+                            Field.Player.RenderDark();
                             Dark();
-                            Buttons[Player.X, Player.Y].BackColor = Color.Red;
-                            Buttons[Player.X, Player.Y - 1].BackColor = Color.White;
+                            Buttons[Field.Player.X, Field.Player.Y].BackColor = Color.Red;
+                            Buttons[Field.Player.X, Field.Player.Y - 1].BackColor = Color.White;
+                            Field.Cells[Field.Player.X, Field.Player.Y] = new Player(Field.Player.X, Field.Player.Y, Field);
+                            Field.Cells[Field.Player.X, Field.Player.Y - 1] = new FreeCell(Field.Player.X, Field.Player.Y - 1);
                         }
                         break;
                     case Keys.Right:  //вправо
-                        if (Player.Step(Direction.Right))
+                        if (Field.Player.Step(Direction.Right))
                         {
-                            Player.RenderDark();
+                            Field.Player.RenderDark();
                             Dark();
-                            Buttons[Player.X, Player.Y].BackColor = Color.Red;
-                            Buttons[Player.X - 1, Player.Y].BackColor = Color.White;
+                            Buttons[Field.Player.X, Field.Player.Y].BackColor = Color.Red;
+                            Buttons[Field.Player.X - 1, Field.Player.Y].BackColor = Color.White;
+                            Field.Cells[Field.Player.X, Field.Player.Y] = new Player(Field.Player.X, Field.Player.Y, Field);
+                            Field.Cells[Field.Player.X-1, Field.Player.Y ] = new FreeCell(Field.Player.X-1, Field.Player.Y);
 
                         }
                         break;
                     case Keys.Left:  //влево
-                        if (Player.Step(Direction.Left))
+                        if (Field.Player.Step(Direction.Left))
                         {
-                            Player.RenderDark();
+                            Field.Player.RenderDark();
                             Dark();
-                            Buttons[Player.X, Player.Y].BackColor = Color.Red;
-                            Buttons[Player.X + 1, Player.Y].BackColor = Color.White;
+                            Buttons[Field.Player.X, Field.Player.Y].BackColor = Color.Red;
+                            Buttons[Field.Player.X + 1, Field.Player.Y].BackColor = Color.White;
+                            Field.Cells[Field.Player.X, Field.Player.Y] = new Player(Field.Player.X, Field.Player.Y, Field);
+                            Field.Cells[Field.Player.X + 1, Field.Player.Y] = new FreeCell(Field.Player.X + 1, Field.Player.Y);
                         }
                         break;
                     default: break;
 
                 }
 
-                if (Player.EndGame())
+                if (Field.Player.EndGame())
                 {
                     MessageBox.Show("Готовы к следующему лабиринту?)");
                     tabPage1.Controls.Clear();
